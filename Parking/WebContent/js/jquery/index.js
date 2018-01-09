@@ -4,7 +4,7 @@
 	    			var options = {
    					  componentRestrictions: {country: "ind"}
    					 };
-	    			autocomplete = new google.maps.places.Autocomplete(document.getElementById('searchPlace'),options);
+	    			var autocomplete = new google.maps.places.Autocomplete(document.getElementById('searchPlace'),options);
 	    			autocomplete.addListener('place_changed', fillInAddress);
 	    		});
 	   		});
@@ -13,7 +13,8 @@
 		        //Get the place details from the autocomplete object.
 				var place = autocomplete.getPlace();
 		    	var obj, Demo;
-		          alert(place.geometry.location.lat()+"  "+place.geometry.location.lng());
+		    	var msg = place.geometry.location.lat()+"  "+place.geometry.location.lng();
+		          alert(msg);
  	 	          Demo = {
 	 	                  "lat": place.geometry.location.lat(),
 	 	                  "lng": place.geometry.location.lng()

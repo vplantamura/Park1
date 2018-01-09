@@ -30,7 +30,9 @@ public class DAO implements DaoInf {
 		try {
 			this.session = sessionFactory.openSession();
 			this.session.beginTransaction();
-//			SELECT * FROM paidparking.parking where (LATITUDE >(18.4575324-0.02) and LATITUDE <(18.4575324+0.02))and(LONGITUDE >(73.86774639999999-0.02) and LONGITUDE <(73.86774639999999+0.02)) ORDER BY ABS(LONGITUDE - 73.86774639999999) LIMIT 1;
+//			SELECT * FROM paidparking.parking where (LATITUDE >(18.4575324-0.02) and LATITUDE <(18.4575324+0.02))
+//			and(LONGITUDE >(73.86774639999999-0.02) and LONGITUDE <(73.86774639999999+0.02)) 
+//          ORDER BY ABS(LONGITUDE - 73.86774639999999) LIMIT 1;
 			org.hibernate.Query queryResult = this.session.createQuery("FROM Parking where latitude >= :lat1 AND latitude <= :lat2 AND longitude >= :lng1 AND longitude <= :lng2 ORDER BY ABS(LONGITUDE - :lng)");
 //			queryResult.setFloat("lat", lat);
 			queryResult.setFloat("lng", lng);
@@ -42,8 +44,10 @@ public class DAO implements DaoInf {
 //			a1.forEach(System.out::println);
 		} catch (Exception e) {
 			this.exceptional();
-			System.err.println(e);
-		} finally {
+			//fix del 1 errore riga 32
+			this.session.getTransaction().rollback();	
+		} finally 
+		{
 			this.closeSession();
 		}		
 		return a1;		
@@ -60,8 +64,11 @@ public class DAO implements DaoInf {
 			return p;
 		} catch (Exception e) {
 			this.exceptional();
+			// fix errore line 58
+			this.session.getTransaction().rollback();{
 			System.err.println("e= "+e);			
-		} finally {
+		} finally 
+		
 			this.closeSession();			
 		}
 		return p;
@@ -73,12 +80,17 @@ public class DAO implements DaoInf {
 		try {
 			this.session = sessionFactory.openSession();
 			this.session.beginTransaction();
+			
 			u = (Users) this.session.get(Users.class, id);
+	
 			return u;
 		} catch (Exception e) {
 			this.exceptional();
+			//fix bug line 75
+			this.session.getTransaction().rollback();
 			System.err.println("e= "+e);
-		} finally {
+		} finally 
+	{
 			this.closeSession();			
 		}		
 		return u;
@@ -90,15 +102,21 @@ public class DAO implements DaoInf {
 		try {
 			this.session = sessionFactory.openSession();
 			this.session.beginTransaction();
+			
 			if(p!=null){
 				p.setImage(path);
 				this.session.update(p);
+				//fix bug line 92 
+				this.session.getTransaction().rollback();
 				return true;
 			}			
 		} catch (Exception e) {
 			this.exceptional();
+			//fix bug line 111
+			this.session.getTransaction().rollback();
 			System.err.println("e= "+e);			
 		} finally {
+			
 			this.closeSession();			
 		}
 		return false;
@@ -112,6 +130,8 @@ public class DAO implements DaoInf {
 			return this.session.save(p);
 		} catch (Exception e) {
 			this.exceptional();
+			//fix bug line 126
+			this.session.getTransaction().rollback();
 			System.err.println("e= "+e);
 		} finally {
 			this.closeSession();			
@@ -132,6 +152,8 @@ public class DAO implements DaoInf {
 			return ((Users)queryResult);
 		} catch (Exception e) {
 			this.exceptional();
+			//fix bug line 148
+			this.session.getTransaction().rollback();
 			System.err.println("e= "+e);
 			return new Users();
 		} finally {
@@ -165,9 +187,12 @@ public class DAO implements DaoInf {
 		try {
 			String q = "SELECT * FROM users inner join parking on users.ID = parking.USERID group by users.ID";
 			a1 = template.query(q, new UserMapping());
-		} catch (Exception e) {
+		} catch (Exception e) 
+		//fix bug line 181
+				this.session.getTransaction().rollback(); {
 			System.err.println(e.getMessage());
-		} finally {
+		}
+		finally {
 		}		
 		return a1;		
 	}
@@ -185,6 +210,8 @@ public class DAO implements DaoInf {
 //			a1.forEach(System.out::println);
 		} catch (Exception e) {
 			this.exceptional();
+			//fix bug line 200
+			this.session.getTransaction().rollback();
 			System.err.println(e);
 		} finally {
 			this.closeSession();
@@ -285,22 +312,21 @@ public class DAO implements DaoInf {
 	public class UserMapping implements RowMapper<Users>{
 		@Override
 		public Users mapRow(ResultSet rs, int rn) throws SQLException {
-			Users u1 = new Users();
-			u1.setId(rs.getInt("ID"));
-			u1.setFname(rs.getString("FNAME"));
-			u1.setLname(rs.getString("LNAME"));
-			u1.setGender(rs.getString("GENDER"));
-			u1.setUsername(rs.getString("USERNAME"));
-			u1.setPassword(rs.getString("PASSWORD"));
-			u1.setDob(rs.getString("DOB"));
-			u1.setLatitude(rs.getFloat("LATITUDE"));
-			u1.setLongitude(rs.getFloat("LONGITUDE"));
-			u1.setArea(rs.getString("AREA"));
-			u1.setCity(rs.getString("CITY"));			
-			u1.setState(rs.getString("STATE"));
-			u1.setCountry(rs.getString("COUNTRY"));
-			u1.setPincode(rs.getInt("PINCODE"));
-			u1.setUsertype(rs.getString("USERTYPE"));
+			Users u1 = new Users(rs.getString("FNAME"), 
+								 rs.getString("LNAME"), 
+								 rs.getString("GENDER"), 
+								 rs.getString("USERNAME"),
+								 rs.getString("PASSWORD"),
+								 rs.getString("DOB"),
+								 rs.getString("AREA"),
+								 rs.getString("STATE"),
+								 rs.getString("CITY"),
+								 rs.getString("COUNTRY"),
+								 rs.getString("USERTYPE"),
+								 rs.getInt("ID"),
+								 rs.getInt("PINCODE"),
+								 rs.getFloat("LATITUDE"),
+								 rs.getFloat("LONGITUDE"));
 			return u1;
 		}
 	}
@@ -308,17 +334,16 @@ public class DAO implements DaoInf {
 	public class ParkMapping implements RowMapper<Parking>{
 		@Override
 		public Parking mapRow(ResultSet rs, int rn) throws SQLException {
-			Parking p1= new Parking();
-			p1.setId(rs.getInt("id"));
-			p1.setArea(rs.getString("area"));
-			p1.setCity(rs.getString("city"));
-			p1.setState(rs.getString("state"));
-			p1.setCountry(rs.getString("country"));
-			p1.setPincode(rs.getInt("pincode"));
-			p1.setLatitude(rs.getFloat("latitude"));
-			p1.setLongitude(rs.getFloat("longitude"));
-			p1.setImage(rs.getString("image"));
-			p1.setUserId(rs.getInt("userid"));
+			Parking p1= new Parking(rs.getInt("id"),
+									rs.getInt("userid"),
+									rs.getInt("pincode"),
+									rs.getFloat("latitude"),
+									rs.getFloat("longitude"),
+									rs.getString("area"),
+									rs.getString("city"),
+									rs.getString("state"),
+									rs.getString("country"),
+									rs.getString("image"));
 			return p1;
 		}		
 	}

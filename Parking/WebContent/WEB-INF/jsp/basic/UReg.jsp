@@ -1,8 +1,17 @@
+<%--
+-- Descrizione: Questa pagina contiene informazioni sulla registrazione dell'utente
+-- Sviluppatori: Federico Lupis, Antonino Leto, Vito Plantamura
+-- Versione 1.0
+--
+--
+--
+--%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>  
 <%@ page errorPage="error.jsp" language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <head>
+
 	<title>User Registration</title>
 	
 	<jsp:include page="/link.jsp" />
@@ -191,50 +200,57 @@ function getLocationValid() {
 	var gsj = gender.split(' ').join('+');
 	var asj = address.split(' ').join('+');
     if(gender=="" || gender!=gsj){
-		window.alert("Gender Field should not be blank..!");
+    	var msg = "Gender Field should not be blank..!";
+		window.alert(msg);
     	document.getElementById("gender").focus();
 		return false;
 	}
 
 	if(pass1=="" || psj!=pass1 || pass2=="" || pcsj!=pass2) {
-		window.alert("Password Field should not be blank or Spaces..");
+		var msg = "Password Field should not be blank or Spaces..";
+		window.alert(msg);
 		document.myForm.password.focus();
 		return false;
 	} else {
 		if(psj.length<2){
-			window.alert("Password Size atleast 2..");
+			var msg = "Password Size atleast 2..";
+			window.alert(msg);
 			document.myForm.password.focus();
 			return false;
 		} else {
 			if((psj!=pcsj)||(pass1!=pass2)){
-				window.alert("Password & Re-enter Password Both are not matched..!");
+				msg = "Password & Re-enter Password Both are not matched..!";
+				window.alert(msg);
 				document.myForm.password.focus();
 				return false;
 			}
 		}
 	}
     if(tc!="one"){
-		window.alert("T&C not Check..!");
+    	var msg = "T&C not Check..!";
+		window.alert(msg);
     	document.getElementById("t&c").focus();
 		return false;
 	}
 
 	//GeoLocation
 	if(address!="" && address!=asj){
-		window.alert("Pincode Invalid..!");
+		var msg = "Pincode Invalid..!";
+		window.alert(msg);
 		document.getElementById("pincode").focus();    		
 		return false;
 	} else {
 		var geocoder = new google.maps.Geocoder();
     	geocoder.geocode({'address': address }, function (results, status) {
         	if (status == google.maps.GeocoderStatus.OK) {
-            	latitude = results[0].geometry.location.lat();
-            	longitude = results[0].geometry.location.lng();
+            	var latitude = results[0].geometry.location.lat();
+            	var longitude = results[0].geometry.location.lng();
 				document.getElementById("latitude").value = latitude;
 				document.getElementById("longitude").value = longitude;
 				document.getElementById("myForm").submit();
         	} else {
-            	alert("GeoLocation Request failed.");
+        		var msg = "GeoLocation Request failed.";
+            	alert(msg);
             	return false;
         	}
     	});        	

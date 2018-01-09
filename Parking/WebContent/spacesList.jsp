@@ -1,3 +1,12 @@
+<%--
+-- 
+-- Sviluppatori: Federico Lupis, Antonino Leto, Vito Plantamura
+-- Versione 1.0
+--
+--
+--
+--%>
+
 <div class="container pana">
 	<div class="box">
   		<div class="container-fluid navbar2">
@@ -6,7 +15,7 @@
     		</div>
   		</div>
 	</div>
-
+    <%-- row contentlist --%>
 	<div class="row contentList">
 		<div class="container">
 		<div class="row">
@@ -74,7 +83,7 @@
                 </div>
                 <hr>
 
-
+                <%-- row --%>
                 <div class="row"> 
                     <div class="col-xs-6 col-sm-2 col-md-2">
                         <a href="#">

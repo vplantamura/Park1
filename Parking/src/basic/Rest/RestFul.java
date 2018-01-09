@@ -9,11 +9,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import basic.Pojo.Demo;
 
-
+/**
+ * 
+ * @author user
+ *
+ */
 @RestController
 public class RestFul {
 
 	@RequestMapping(value="/search",method=RequestMethod.POST)
+	/**
+	 *@param (demo)
+	 */
 	public ResponseEntity<Demo> search(@ModelAttribute("demo")Demo demo){
 		System.out.println(demo.getLat()+" "+demo.getLng());
 		return new ResponseEntity<Demo>(demo,HttpStatus.OK);

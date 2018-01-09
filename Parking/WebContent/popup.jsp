@@ -1,3 +1,12 @@
+<%--
+-- Descrizione: Questa pagina contiene il form utilizzato per il popup di Login
+-- Sviluppatori: Federico Lupis, Antonino Leto, Vito Plantamura
+-- Versione 1.0
+--
+--
+--
+--%>
+
 <div class="popup-box chat-popup" id="qnimate">
 	<div class="popup-head">
 		<div class="popup-head-left pull-left"> Your Details</div>
@@ -30,7 +39,7 @@
 						</div>
 					</div>
 				</div>
-
+                <%-- row --%>
 				<div class="row">
 					<div class="col-xs-3 col-sm-3 col-md-3">
 						<div class="form-group">
@@ -55,7 +64,7 @@
 					<div class="col-xs-12 col-sm-6 col-md-6">
 						<div class="form-group">
 							<input type="checkbox" id="tc" name="tc" />
-							<label for="tc">I agree to the YourParkingSpace Terms & Conditions</label>
+							<label for="tc">I agree to the YourParkingSpace Terms and Conditions</label>
 						</div>
 					</div>
 				</div>
@@ -68,7 +77,7 @@
 				</div>
 			</form>				
 		</div>
-
+        <%-- pop up message --%>
 		<div class="popup-messages-footer">
 			<textarea id="status_message" placeholder="Type a message..." rows="10" cols="40" name="message"></textarea>
 			<div class="btn-footer">
@@ -80,7 +89,7 @@
 		</div>
 	</div>
 	
-</div>
+	<%-- text --%>
 <script type="text/javascript">
 $(function(){
 	$("#addClass").click(function () {

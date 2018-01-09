@@ -1,8 +1,17 @@
+<%--
+-- Descrizione: contiene il form per la registrazione al parcheggio
+-- Sviluppatori: Federico Lupis, Antonino Leto, Vito Plantamura
+-- Versione 1.0
+--
+--
+--
+--%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>  
 <%@ page errorPage="error.jsp" language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Parking Register</title>
 <jsp:include page="/link.jsp" />
@@ -237,7 +246,8 @@ function getPSpaceValid(){
 	var latsj = lat.split(' ').join('+');
 	var lngsj = lng.split(' ').join('+');
     if(lat=="" || lat!=latsj || lng=="" || lng!=lngsj) {
-		window.alert("LatLong Field should not be blank..!");
+    	var msg = "LatLong Field should not be blank..!";
+		window.alert(msg);
 		return false;
 	}
 }
